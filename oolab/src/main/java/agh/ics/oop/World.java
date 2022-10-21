@@ -21,7 +21,6 @@ public class World {
 //        System.out.println(position2);
 //        System.out.println(position1.add(position2));
 //        System.out.println();
-
         Animal kerfus = new Animal();
         System.out.println(kerfus);
         MoveDirection[] moveset = {MoveDirection.RIGHT, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD};
@@ -36,6 +35,7 @@ public class World {
         for (MoveDirection move: animalMoves){
             System.out.println(move);
         }
+        //TODO: stworzyc cos co pozwoli przestestowac poruszanie sie Kerfusia
     }
 
     public static void convert(String[] args, Direction[] moves){
@@ -58,18 +58,7 @@ public class World {
                 case BACKWARD -> System.out.println("Zwierzak idzie do tylu");
                 case RIGHT -> System.out.println("Zwierzak skreca w prawo");
                 case LEFT -> System.out.println("Zwierzak skreca w lewo");
-                default -> System.out.print("");
             }
         }
-        //        int arr_len = moves.length;
-//        for(int i = 0; i < arr_len; i++){
-//            switch (moves[i]) {
-//                case FORWARD -> System.out.println("Zwierzak idzie do przodu");
-//                case BACKWARD -> System.out.println("Zwierzak idzie do tylu");
-//                case RIGHT -> System.out.println("Zwierzak skreca w prawo");
-//                case LEFT -> System.out.println("Zwierzak skreca w lewo");
-//                default -> System.out.print("");
-//            }
-//        }
     }
 }
