@@ -13,7 +13,6 @@ public enum MapDirection {
             case EAST: return "Wschod";
             case SOUTH: return "Poludnie";
             case WEST: return "Zachod";
-            // TODO
             default: return "Wrong data";
         }
     }

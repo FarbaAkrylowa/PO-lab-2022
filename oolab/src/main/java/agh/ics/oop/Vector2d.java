@@ -3,8 +3,8 @@ package agh.ics.oop;
 import java.util.Objects;
 
 public class Vector2d {
-        final public int x;
-        final public int y;
+        public final int x;
+        public final int y;
 
         public Vector2d(int x, int y){
             this.x = x;
