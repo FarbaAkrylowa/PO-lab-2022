@@ -1,41 +1,30 @@
 package agh.ics.oop;
 
-
 import java.util.Arrays;
 
 public class World {
     public static void main(String[] args){
-//        System.out.println("Start");
-//        Direction[] moves = new Direction[100];
-//        int arrLen = args.length;
-//
-//        convert(args, moves);
-//        run(Arrays.copyOfRange(moves, 0, arrLen));
-//        System.out.println("Stop");
-//        System.out.println();
-//
-//        System.out.println("Lab 2");
-//        Vector2d position1 = new Vector2d(1,2);
-//        System.out.println(position1);
-//        Vector2d position2 = new Vector2d(-2,1);
-//        System.out.println(position2);
-//        System.out.println(position1.add(position2));
-//        System.out.println();
         Animal kerfus = new Animal();
-        System.out.println(kerfus);
-        MoveDirection[] moveset = {MoveDirection.RIGHT, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD};
-        for (MoveDirection go: moveset){
-            kerfus.move(go);
-            System.out.println(kerfus);
-        }
+        OptionsParser moveControl = new OptionsParser();
+        MoveDirection[] animalMoves = moveControl.parse(args);
 
-        OptionsParser control = new OptionsParser();
-        MoveDirection[] animalMoves = control.parse(args);
-
+        System.out.println("Kerfuś zaraz wyruszy!");
+        System.out.println("=======================");
         for (MoveDirection move: animalMoves){
-            System.out.println(move);
+            System.out.println("Before move: " + kerfus);
+            System.out.println("Current move: " + move);
+            kerfus.move(move);
+            System.out.println("After move: " + kerfus);
+            System.out.println("=======================");
         }
-        //TODO: stworzyc cos co pozwoli przestestowac poruszanie sie Kerfusia
+        /*
+            Pojawienie się dwóch zwierząt w jednym miejscu - mój pomysł:
+            Tworzymy sobie tablice 2D wielkości naszej mapy typu boolean - [i][j] = true jeśli stoi tam zwierz wpp. false
+            W metodzie move klasy Animal dodajemy odpowiedni warunek na sprawdzenie czy jakies zwierze nie siedzi na danym
+            polu na ktore chcemy przejsc.
+            Jeśli mozna prejsc to aktualną pozycję w tablicy oznaczamy jako false, a pole na ktore przeszliśmy ustawiamy
+            na true.
+        */
     }
 
     public static void convert(String[] args, Direction[] moves){

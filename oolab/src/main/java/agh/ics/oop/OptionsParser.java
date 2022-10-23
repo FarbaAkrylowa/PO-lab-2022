@@ -3,8 +3,8 @@ import java.util.Arrays;
 
 public class OptionsParser {
     public MoveDirection[] parse(String[] moves){
-        MoveDirection[] convertedMoves = new MoveDirection[100];
-        int counter = 0, currId = 0, movesLen = moves.length;
+        MoveDirection[] convertedMoves = new MoveDirection[1000];
+        int currId = 0;
 
         for (String move : moves) {
             switch (move) {
@@ -26,7 +26,6 @@ public class OptionsParser {
                 }
             }
         }
-
         return Arrays.copyOfRange(convertedMoves, 0, currId);
     }
 }

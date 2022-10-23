@@ -33,70 +33,28 @@ public class Animal {
     }
 
     public void move(MoveDirection direction){
-        Vector2d curr_loc = this.getLocation();
-        MapDirection curr_orient = this.getOrientation();
+        MapDirection currOrient = this.getOrientation();
 
-        if (direction.equals(MoveDirection.RIGHT)){
-            switch (curr_orient){
-                case NORTH -> this.setOrientation(MapDirection.EAST);
-                case WEST -> this.setOrientation(MapDirection.SOUTH);
-                case SOUTH -> this.setOrientation(MapDirection.WEST);
-                case EAST -> this.setOrientation(MapDirection.NORTH);
-            }
-        } else if (direction.equals(MoveDirection.LEFT)) {
-            switch (curr_orient) {
-                case NORTH -> this.setOrientation(MapDirection.WEST);
-                case WEST -> this.setOrientation(MapDirection.NORTH);
-                case SOUTH -> this.setOrientation(MapDirection.EAST);
-                case EAST -> this.setOrientation(MapDirection.SOUTH);
-            }
-        }else if (direction.equals(MoveDirection.FORWARD)) {
-            switch (curr_orient){
-                case NORTH:
-                    if (curr_loc.y + 1 <= 4){
-                        this.setLocation(new Vector2d(curr_loc.x, curr_loc.y + 1));
-                    }
-                    break;
-                case WEST:
-                    if (curr_loc.x - 1 >= 0){
-                        this.setLocation(new Vector2d(curr_loc.x - 1, curr_loc.y));
-                    }
-                    break;
-                case SOUTH:
-                    if (curr_loc.y - 1 >= 0){
-                        this.setLocation(new Vector2d(curr_loc.x, curr_loc.y - 1));
-                    }
-                    break;
-                case EAST:
-                    if (curr_loc.x + 1 <= 4){
-                        this.setLocation(new Vector2d(curr_loc.x + 1, curr_loc.y));
-                    }
-                    break;
-            }
-        }else {
-                switch (curr_orient){
-                    case NORTH:
-                        if (curr_loc.y - 1 >= 0){
-                            this.setLocation(new Vector2d(curr_loc.x, curr_loc.y - 1));
-                        }
-                        break;
-                    case WEST:
-                        if (curr_loc.x + 1 <= 4){
-                            this.setLocation(new Vector2d(curr_loc.x + 1, curr_loc.y));
-                        }
-                        break;
-                    case SOUTH:
-                        if (curr_loc.y + 1 <= 4){
-                            this.setLocation(new Vector2d(curr_loc.x, curr_loc.y + 1));
-                        }
-                        break;
-                    case EAST:
-                        if (curr_loc.x - 1 >= 0){
-                            this.setLocation(new Vector2d(curr_loc.x - 1, curr_loc.y));
-                        }
-                        break;
+        Vector2d currLoc = this.getLocation();
+        Vector2d unitVector = currOrient.toUnitVector();
+        Vector2d topRight = new Vector2d(4, 4);
+        Vector2d bottomLeft = new Vector2d(0, 0);
+
+        switch (direction){
+            case RIGHT -> this.setOrientation(currOrient.next());
+            case LEFT -> this.setOrientation(currOrient.previous());
+            case FORWARD -> {
+                currLoc = currLoc.add(unitVector);
+                if (currLoc.follows(bottomLeft) && currLoc.precedes(topRight)){
+                    this.setLocation(currLoc);
                 }
             }
-
+            case BACKWARD -> {
+                currLoc = currLoc.add(unitVector.opposite());
+                if (currLoc.follows(bottomLeft) && currLoc.precedes(topRight)) {
+                    this.setLocation(currLoc);
+                }
+            }
+        }
     }
 }
