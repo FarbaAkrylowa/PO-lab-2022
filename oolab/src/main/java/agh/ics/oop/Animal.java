@@ -1,8 +1,19 @@
 package agh.ics.oop;
 
 public class Animal {
-    private MapDirection orientation = MapDirection.NORTH;
-    private Vector2d location = new Vector2d(2, 2);
+    private MapDirection orientation;
+    private Vector2d location;
+    private final IWorldMap map;
+
+    public Animal(IWorldMap map){
+        this(map, new Vector2d(2, 2));
+    }
+
+    public Animal(IWorldMap map, Vector2d initialPosition){
+        this.map = map;
+        this.location = initialPosition;
+        this.orientation = MapDirection.NORTH;
+    }
 
     public MapDirection getOrientation(){
         return orientation;
@@ -12,20 +23,14 @@ public class Animal {
         return location;
     }
 
-    public void setOrientation(MapDirection direction){
-        this.orientation = direction;
-    }
-
-    public void setLocation(Vector2d loc){
-        this.location = loc;
-    }
-
     @Override
     public String toString(){
-        MapDirection ort = getOrientation();
-        Vector2d loc = getLocation();
-        // wypluwa Polnoc bo jest z automatu tam wstawione toString
-        return ort + " (" + loc.x + ", " + loc.y + ")";
+        return switch (this.orientation){
+            case NORTH -> "^";
+            case EAST -> ">";
+            case SOUTH -> "v";
+            case WEST -> "<";
+        };
     }
 
     public boolean isAt(Vector2d position){
@@ -33,26 +38,23 @@ public class Animal {
     }
 
     public void move(MoveDirection direction){
-        MapDirection currOrient = this.getOrientation();
+        MapDirection currOrient = this.orientation;
 
-        Vector2d currLoc = this.getLocation();
+        Vector2d newLocation = this.location;
         Vector2d unitVector = currOrient.toUnitVector();
-        Vector2d topRight = new Vector2d(4, 4);
-        Vector2d bottomLeft = new Vector2d(0, 0);
-
         switch (direction){
-            case RIGHT -> this.setOrientation(currOrient.next());
-            case LEFT -> this.setOrientation(currOrient.previous());
+            case RIGHT -> this.orientation = currOrient.next();
+            case LEFT -> this.orientation = currOrient.previous();
             case FORWARD -> {
-                currLoc = currLoc.add(unitVector);
-                if (currLoc.follows(bottomLeft) && currLoc.precedes(topRight)){
-                    this.setLocation(currLoc);
+                newLocation = newLocation.add(unitVector);
+                if (this.map.canMoveTo(newLocation)){
+                    this.location = newLocation;
                 }
             }
             case BACKWARD -> {
-                currLoc = currLoc.add(unitVector.opposite());
-                if (currLoc.follows(bottomLeft) && currLoc.precedes(topRight)) {
-                    this.setLocation(currLoc);
+                newLocation = newLocation.add(unitVector.opposite());
+                if (this.map.canMoveTo(newLocation)) {
+                    this.location = newLocation;
                 }
             }
         }

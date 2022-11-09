@@ -59,7 +59,7 @@ public class Vector2d {
             Vector2d that = (Vector2d) other;
 
             // return that.x == this.x && that.y == this.y;
-            return Integer.compare(that.x, this.x) == 0 && Integer.compare(that.y, this.y) == 0;
+            return that.x == this.x && that.y == this.y;
         }
 
         @Override

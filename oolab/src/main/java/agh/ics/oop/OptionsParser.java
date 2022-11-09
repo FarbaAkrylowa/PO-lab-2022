@@ -1,31 +1,22 @@
 package agh.ics.oop;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class OptionsParser {
     public MoveDirection[] parse(String[] moves){
-        MoveDirection[] convertedMoves = new MoveDirection[1000];
-        int currId = 0;
-
-        for (String move : moves) {
-            switch (move) {
-                case "f", "forward" -> {
-                    convertedMoves[currId] = MoveDirection.FORWARD;
-                    currId += 1;
-                }
-                case "b", "backward" -> {
-                    convertedMoves[currId] = MoveDirection.BACKWARD;
-                    currId += 1;
-                }
-                case "r", "right" -> {
-                    convertedMoves[currId] = MoveDirection.RIGHT;
-                    currId += 1;
-                }
-                case "l", "left" -> {
-                    convertedMoves[currId] = MoveDirection.LEFT;
-                    currId += 1;
-                }
+        List<MoveDirection> convertedMoves = new ArrayList<>();
+        for (String move: moves){
+            switch (move){
+                case "f", "forward" -> convertedMoves.add(MoveDirection.FORWARD);
+                case "b", "backward" -> convertedMoves.add(MoveDirection.BACKWARD);
+                case "l", "left" -> convertedMoves.add(MoveDirection.LEFT);
+                case "r", "right" -> convertedMoves.add(MoveDirection.RIGHT);
             }
         }
-        return Arrays.copyOfRange(convertedMoves, 0, currId);
+
+        MoveDirection[] newMoves = new MoveDirection[convertedMoves.size()];
+        convertedMoves.toArray(newMoves);
+        return newMoves;
     }
 }
