@@ -157,16 +157,11 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public Object objectAt(Vector2d position) {
-        Object animalCheck = super.objectAt(position);
-        if(animalCheck != null){
-            return animalCheck;
-        }
-
         for (Grass grass: grassPlaces){
             if (grass.getPosition().equals(position)){
                 return grass;
             }
         }
-        return null;
+        return super.objectAt(position);
     }
 }

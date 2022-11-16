@@ -69,5 +69,6 @@ public class Vector2d {
             hash = (hash >> 16) | (hash >>> 16);
             hash = hash ^ Math.min(x, y);
             return hash;
+//            return Objects.hash(this.x, this.y);
         }
 }
