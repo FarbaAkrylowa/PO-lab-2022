@@ -1,6 +1,5 @@
 package agh.ics.oop;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RectangularMap extends AbstractWorldMap{
     private final Vector2d lowerLeftCorner;
@@ -26,20 +25,5 @@ public class RectangularMap extends AbstractWorldMap{
     @Override
     public boolean canMoveTo(Vector2d position) {
         return position.follows(lowerLeftCorner) && position.precedes(upperRightCorner) && super.canMoveTo(position);
-    }
-
-    @Override
-    public boolean place(Animal animal) {
-        return super.place(animal);
-    }
-
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return super.isOccupied(position);
-    }
-
-    @Override
-    public Object objectAt(Vector2d position) {
-        return super.objectAt(position);
     }
 }

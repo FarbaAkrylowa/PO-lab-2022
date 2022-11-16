@@ -82,8 +82,6 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-//        boolean occupied = isOccupied(position);
-
         if (super.canMoveTo(position) && position.follows(lowerLeftCorner)){
             return true;
         }
@@ -103,10 +101,6 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean place(Animal animal) {
-//        if (!isOccupied(animal.getLocation())){
-//            this.animals.add(animal);
-//            return true;
-//        }
         if (super.place(animal)){
             return true;
         }
