@@ -23,6 +23,7 @@ public class AnimalTest {
         // location and orientation).
         // We use instance of IWorldMap, so we check almost every method of IWorldMap/RectangularMap except
         // testing eventual collisions (next test will check behaviour of more than one animal on the map).
+        map1.place(animal1);
         String[] movesToTest = {"abba", "b", "essa", "r", "forward", "r", "analfabeta", "f", "f", "right", "forward",
                 "dale",  "f", "right", "frlb", "f", "forward", "forward", "left", "todorki", "f", "f", "r", "forward",
                 "izuku", "r", "f", "left", "forward", "tokoyami", "r", "f", "right", "forward", "bakugo", "right",
@@ -45,9 +46,12 @@ public class AnimalTest {
 
         assertEquals(MapDirection.NORTH, animal1.getOrientation());
         assertEquals(new Vector2d(2, 2), animal1.getLocation());
+//        System.out.println(animal1 + " " + animal1.getLocation());
         for (int i = 0; i < len; i++){
             animal1.move(convertedMovesToTest[i]);
-
+//            System.out.println("==========");
+//            System.out.println("Current move: " + convertedMovesToTest[i]);
+//            System.out.println(animal1 + " " + animal1.getLocation() + " == " + rightOrients[i] + " " + rightLoc[i]);
             assertEquals(rightOrients[i], animal1.getOrientation());
             assertEquals(rightLoc[i], animal1.getLocation());
         }
@@ -75,19 +79,19 @@ public class AnimalTest {
             switch (i % 3){
                 case 0 -> {
                     hippo.move(moves[i]);
-                    System.out.println("Hippo " + hippo.getLocation());
+//                    System.out.println("Hippo " + hippo.getLocation());
                     assertEquals(hippoLocs[h], hippo.getLocation());
                     h++;
                 }
                 case 1 -> {
                     seal.move(moves[i]);
-                    System.out.println("Seal: " + seal.getLocation());
+//                    System.out.println("Seal: " + seal.getLocation());
                     assertEquals(sealLocs[s], seal.getLocation());
                     s++;
                 }
                 case 2 -> {
                     camel.move(moves[i]);
-                    System.out.println("Camel: " + camel.getLocation());
+//                    System.out.println("Camel: " + camel.getLocation());
                     assertEquals(camelLocs[c], camel.getLocation());
                     c++;
                 }

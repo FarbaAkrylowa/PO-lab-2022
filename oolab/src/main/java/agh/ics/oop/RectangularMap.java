@@ -2,11 +2,12 @@ package agh.ics.oop;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RectangularMap implements IWorldMap{
+public class RectangularMap extends AbstractWorldMap{
     private final Vector2d lowerLeftCorner;
     private final Vector2d upperRightCorner;
+//    private static final List<Animal> animals = new ArrayList<>();
     private final List<Animal> animals = new ArrayList<>();
-    private MapVisualizer visualizeMap;
+    private final MapVisualizer visualizeMap;
 
 
     public RectangularMap(int width, int height){

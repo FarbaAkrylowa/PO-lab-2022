@@ -20,15 +20,15 @@ public class SimulationEngine implements IEngine{
         }
     }
 
-    public Animal getAnimal(int ind){
-        return animals.get(ind);
-    }
     @Override
     public void run() {
         int len = this.directions.length;
+//        int numOfAnimals = RectangularMap.getNumberOfAnimals();
         for (int i = 0; i < len; i++){
-            System.out.println(map);
+            System.out.println(this.map);
             animals.get(i % animals.size()).move(directions[i]);
+//            RectangularMap.getAnimalOfInd(i % numOfAnimals).move(directions[i]);
         }
+        System.out.println(this.map);
     }
 }
