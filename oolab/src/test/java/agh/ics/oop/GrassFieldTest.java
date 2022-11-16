@@ -57,6 +57,7 @@ public class GrassFieldTest {
         map.place(boar);
         map.place(piglet);
         map.place(tapir);
+
         assertEquals(map.objectAt(boar.getLocation()), boar);
         assertEquals(map.objectAt(piglet.getLocation()), piglet);
         assertEquals(map.objectAt(tapir.getLocation()), tapir);

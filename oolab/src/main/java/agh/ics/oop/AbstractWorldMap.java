@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractWorldMap implements IWorldMap {
-    protected Vector2d upperRightCorner;
-    protected Vector2d lowerLeftCorner;
-    protected List<Animal> animals = new ArrayList<Animal>();
-    protected List<Grass> grassPlaces = new ArrayList<Grass>();
+    protected abstract Vector2d getUpperRight();
+    protected abstract Vector2d getLowerLeft();
+    protected List<Animal> animals;
+    public AbstractWorldMap() {
+
+        this.animals = new ArrayList<>();
+    }
+
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return position.follows(lowerLeftCorner) && position.precedes(upperRightCorner) && !isOccupied(position);
+        return !(this.isOccupied(position));
     }
 
     @Override
@@ -44,6 +48,7 @@ public abstract class AbstractWorldMap implements IWorldMap {
 
     @Override
     public String toString() {
-        return "asd";
+        MapVisualizer animalsMap = new MapVisualizer(this);
+        return animalsMap.draw(getLowerLeft(), getUpperRight());
     }
 }
