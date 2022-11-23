@@ -65,10 +65,10 @@ public class Vector2d {
         @Override
         public int hashCode(){
             // stackoverflow <3
-            int hash = Math.max(x, y);
-            hash = (hash >> 16) | (hash >>> 16);
-            hash = hash ^ Math.min(x, y);
-            return hash;
-//            return Objects.hash(this.x, this.y);
+//            int hash = Math.max(x, y);
+//            hash = (hash >> 16) | (hash >>> 16);
+//            hash = hash ^ Math.min(x, y);
+//            return hash;
+            return Objects.hash(this.x, this.y);
         }
 }

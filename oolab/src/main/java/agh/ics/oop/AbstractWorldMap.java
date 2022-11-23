@@ -1,15 +1,17 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public abstract class AbstractWorldMap implements IWorldMap {
+public abstract class AbstractWorldMap implements IWorldMap, IPositionChangedObserver {
     protected abstract Vector2d getUpperRight();
     protected abstract Vector2d getLowerLeft();
-    protected List<Animal> animals;
+    protected Map<Vector2d, Animal> animals;
     public AbstractWorldMap() {
 
-        this.animals = new ArrayList<>();
+        this.animals = new HashMap<>();
     }
 
     @Override
@@ -20,7 +22,8 @@ public abstract class AbstractWorldMap implements IWorldMap {
     @Override
     public boolean place(Animal animal) {
         if (!isOccupied(animal.getLocation())){
-            this.animals.add(animal);
+            this.animals.put(animal.getLocation(), animal);
+            animal.addObserver(this);
             return true;
         }
         return false;
@@ -28,27 +31,23 @@ public abstract class AbstractWorldMap implements IWorldMap {
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        for (Animal animal: animals){
-            if (animal.isAt(position)){
-                return true;
-            }
-        }
-        return false;
+        return this.animals.containsKey(position);
     }
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (Animal animal: animals){
-            if (animal.isAt(position)){
-                return animal;
-            }
-        }
-        return null;
+        return this.animals.get(position);
     }
 
     @Override
     public String toString() {
         MapVisualizer animalsMap = new MapVisualizer(this);
         return animalsMap.draw(getLowerLeft(), getUpperRight());
+    }
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        Animal animal = this.animals.get(oldPosition);
+        this.animals.remove(oldPosition);
+        this.animals.put(newPosition, animal);
     }
 }

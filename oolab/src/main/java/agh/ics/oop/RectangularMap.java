@@ -1,5 +1,6 @@
 package agh.ics.oop;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RectangularMap extends AbstractWorldMap{
     private final Vector2d lowerLeftCorner;
@@ -7,7 +8,7 @@ public class RectangularMap extends AbstractWorldMap{
 
 
     public RectangularMap(int width, int height){
-        this.animals = new ArrayList<>();
+        this.animals = new HashMap<>();
         this.lowerLeftCorner = new Vector2d(0, 0);
         this.upperRightCorner = new Vector2d(width, height);
     }
