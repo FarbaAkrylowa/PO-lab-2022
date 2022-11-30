@@ -24,7 +24,7 @@ public class SimulationEngine implements IEngine{
     public void run() {
         int len = this.directions.length;
         for (int i = 0; i < len; i++){
-            System.out.println(this.map);
+//            System.out.println(this.map);
             animals.get(i % animals.size()).move(directions[i]);
         }
         System.out.println(this.map);

@@ -28,10 +28,6 @@ public class Animal {
         return location;
     }
 
-    public void setLocation(Vector2d position){
-        this.location = position;
-    }
-
     @Override
     public String toString(){
         return switch (this.orientation){
@@ -54,7 +50,7 @@ public class Animal {
         this.observers.remove(observer);
     }
 
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+    public void positionChangedA(Vector2d oldPosition, Vector2d newPosition){
         for (IPositionChangedObserver obs: this.observers){
             obs.positionChanged(oldPosition, newPosition);
         }
@@ -73,14 +69,14 @@ public class Animal {
                 if (this.map.canMoveTo(newLocation)){
                     this.location = newLocation;
                 }
-                positionChanged(oldPos, this.location);
+                positionChangedA(oldPos, this.location);
             }
             case BACKWARD -> {
                 newLocation = newLocation.add(unitVector.opposite());
                 if (this.map.canMoveTo(newLocation)) {
                     this.location = newLocation;
                 }
-                positionChanged(oldPos, this.location);
+                positionChangedA(oldPos, this.location);
             }
         }
     }

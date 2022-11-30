@@ -1,6 +1,11 @@
 package agh.ics.oop;
 
 public interface IWorldMap {
+    int getMinX();
+    int getMinY();
+    int getMaxX();
+    int getMaxY();
+
     /**
      * Indicate if any object can move to the given position.
      *

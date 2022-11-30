@@ -14,6 +14,15 @@ public class RectangularMap extends AbstractWorldMap{
     }
 
     @Override
+    public boolean place(Animal animal) throws IllegalArgumentException{
+        if (super.place(animal)){
+            return true;
+        }
+
+        throw new IllegalArgumentException(animal.getLocation() + " is invalid animal placement!");
+    }
+
+    @Override
     protected Vector2d getUpperRight() {
         return this.upperRightCorner;
     }
@@ -21,6 +30,26 @@ public class RectangularMap extends AbstractWorldMap{
     @Override
     protected Vector2d getLowerLeft() {
         return this.lowerLeftCorner;
+    }
+
+    @Override
+    public int getMinX() {
+        return this.lowerLeftCorner.getX();
+    }
+
+    @Override
+    public int getMinY() {
+        return this.lowerLeftCorner.getY();
+    }
+
+    @Override
+    public int getMaxX() {
+        return this.upperRightCorner.getX();
+    }
+
+    @Override
+    public int getMaxY() {
+        return this.getUpperRight().getY();
     }
 
     @Override

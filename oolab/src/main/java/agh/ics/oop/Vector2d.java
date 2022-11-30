@@ -11,7 +11,13 @@ public class Vector2d {
             this.y = y;
         }
 
-        @Override
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+    @Override
         public String toString(){
             return "(" + this.x + ", " + this.y + ")";
         }

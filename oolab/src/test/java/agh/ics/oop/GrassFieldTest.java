@@ -5,13 +5,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GrassFieldTest {
-    IWorldMap map = new GrassField(10);
-    Animal boar = new Animal(map, new Vector2d(2, 2));
-    Animal piglet = new Animal(map, new Vector2d(4, 7));
-    Animal tapir = new Animal(map, new Vector2d(3, 1));
-
     @Test
     void canMoveTo() {
+        System.out.println("canMoveTo");
+        IWorldMap map = new GrassField(10);
+        Animal boar = new Animal(map, new Vector2d(2, 2));
+        Animal piglet = new Animal(map, new Vector2d(4, 7));
+        Animal tapir = new Animal(map, new Vector2d(3, 1));
+
         map.place(boar);
         map.place(piglet);
         map.place(tapir);
@@ -23,15 +24,44 @@ public class GrassFieldTest {
 
     @Test
     void place() {
+        System.out.println("place");
+        IWorldMap map = new GrassField(10);
+        Animal boar = new Animal(map, new Vector2d(2, 2));
+        Animal piglet = new Animal(map, new Vector2d(4, 7));
+        Animal tapir = new Animal(map, new Vector2d(3, 1));
+
+        assertTrue(map.place(boar));
+        assertTrue(map.place(piglet));
+        assertTrue(map.place(tapir));
+    }
+    @Test
+    void exceptionPlaceTest(){
+        System.out.println("exceptionPlace");
+        IWorldMap map = new GrassField(10);
+        Animal boar = new Animal(map, new Vector2d(2, 2));
+        Animal piglet = new Animal(map, new Vector2d(4, 7));
+        Animal tapir = new Animal(map, new Vector2d(3, 1));
+
         Animal alpaca = new Animal(map, new Vector2d(4, 7));
         assertTrue(map.place(boar));
         assertTrue(map.place(piglet));
         assertTrue(map.place(tapir));
-        assertFalse(map.place(alpaca));
+
+        try {
+            map.place(alpaca);
+        } catch (IllegalArgumentException exception){
+            assertEquals(alpaca.getLocation() + " is invalid animal placement!", exception.getMessage());
+        }
     }
 
     @Test
     void isOccupied() {
+        System.out.println("isOccupied");
+        IWorldMap map = new GrassField(10);
+        Animal boar = new Animal(map, new Vector2d(2, 2));
+        Animal piglet = new Animal(map, new Vector2d(4, 7));
+        Animal tapir = new Animal(map, new Vector2d(3, 1));
+
         map.place(boar);
         map.place(piglet);
         map.place(tapir);
@@ -54,6 +84,12 @@ public class GrassFieldTest {
 
     @Test
     void objectAt() {
+        System.out.println("objectAt");
+        IWorldMap map = new GrassField(10);
+        Animal boar = new Animal(map, new Vector2d(2, 2));
+        Animal piglet = new Animal(map, new Vector2d(4, 7));
+        Animal tapir = new Animal(map, new Vector2d(3, 1));
+
         map.place(boar);
         map.place(piglet);
         map.place(tapir);

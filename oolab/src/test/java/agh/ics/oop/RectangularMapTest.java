@@ -24,11 +24,23 @@ public class RectangularMapTest {
 
     @Test
     void place() {
+        assertTrue(map.place(boar));
+        assertTrue(map.place(piglet));
+        assertTrue(map.place(tapir));
+    }
+
+    @Test
+    void exceptionPlaceTest(){
         Animal alpaca = new Animal(map, new Vector2d(4, 7));
         assertTrue(map.place(boar));
         assertTrue(map.place(piglet));
         assertTrue(map.place(tapir));
-        assertFalse(map.place(alpaca));
+
+        try {
+            map.place(alpaca);
+        } catch (IllegalArgumentException exception){
+            assertEquals(alpaca.getLocation() + " is invalid animal placement!", exception.getMessage());
+        }
     }
 
     @Test

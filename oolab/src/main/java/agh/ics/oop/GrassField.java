@@ -5,16 +5,14 @@ import java.util.*;
 
 public class GrassField extends AbstractWorldMap{
     private final int numberOfGrass;
-    private final Vector2d lowerLeftCorner;
-    private final Vector2d upperRightCorner;
     private final Map<Vector2d, Grass> grassPlaces;
+    private final MapBoundary mapBoundary;
 
     public GrassField(int n){
         this.numberOfGrass = n;
         this.animals = new HashMap<>();
         this.grassPlaces = new HashMap<>();
-        this.lowerLeftCorner = new Vector2d(0, 0);
-        this.upperRightCorner = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        this.mapBoundary = new MapBoundary();
 
         int grassCount = 0;
         while (grassCount < this.numberOfGrass){
@@ -26,83 +24,74 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     protected Vector2d getUpperRight() {
-        int urx = 0, ury = 0;
-        for (Map.Entry<Vector2d, Animal> animal: animals.entrySet()){
-            if (animal.getValue().getLocation().x > urx){
-                urx = animal.getValue().getLocation().x;
-            }
-            if (animal.getValue().getLocation().y > ury){
-                ury = animal.getValue().getLocation().y;
-            }
-        }
-
-        for (Map.Entry<Vector2d, Grass> grass: grassPlaces.entrySet()){
-            if (grass.getValue().getPosition().x > urx){
-                urx = grass.getValue().getPosition().x;
-            }
-            if (grass.getValue().getPosition().y > ury){
-                ury = grass.getValue().getPosition().y;
-            }
-        }
-        return new Vector2d(urx, ury);
+        return this.mapBoundary.getUpRight();
     }
 
     @Override
     protected Vector2d getLowerLeft() {
-        int llx = Integer.MAX_VALUE, lly = Integer.MAX_VALUE;
-        for (Map.Entry<Vector2d, Animal> animal: animals.entrySet()){
-            if (animal.getValue().getLocation().x < llx){
-                llx = animal.getValue().getLocation().x;
-            }
-            if (animal.getValue().getLocation().y < lly){
-                lly = animal.getValue().getLocation().y;
-            }
-        }
+        return this.mapBoundary.getLowLeft();
+    }
 
-        for (Map.Entry<Vector2d, Grass> grass: grassPlaces.entrySet()){
-            if (grass.getValue().getPosition().x < llx){
-                llx = grass.getValue().getPosition().x;
-            }
-            if (grass.getValue().getPosition().y < lly){
-                lly = grass.getValue().getPosition().y;
-            }
-        }
+    @Override
+    public int getMinX() {
+        return this.mapBoundary.getLowLeft().getX();
+    }
 
-        return new Vector2d(llx, lly);
+    @Override
+    public int getMinY() {
+        return this.mapBoundary.getLowLeft().getY();
+    }
+
+    @Override
+    public int getMaxX() {
+        return this.mapBoundary.getUpRight().getX();
+    }
+
+    @Override
+    public int getMaxY() {
+        return this.mapBoundary.getUpRight().getY();
     }
 
     @Override
     public boolean canMoveTo(Vector2d position) {
-        if (!isOccupied(position) && position.follows(lowerLeftCorner)){
+        if (!isOccupied(position)){
             return true;
         }
         else if (objectAt(position) instanceof Grass) {
-            grassPlaces.remove(position);
             placeNewGrass();
+            grassPlaces.remove(position);
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public boolean place(Animal animal) throws IllegalArgumentException{
+        System.out.println("Animals: " + this.animals.entrySet());
         if (super.place(animal)){
+            this.mapBoundary.addPosition(animal.getLocation());
+            animal.addObserver(mapBoundary);
+            System.out.println("Animals: " + this.animals.entrySet());
             return true;
         }
-        else {
-            if (objectAt(animal.getLocation()) instanceof Grass occupyingObject){
-                this.grassPlaces.remove(occupyingObject.getPosition());
-                this.animals.put(animal.getLocation(), animal);
-                animal.addObserver(this);
-                placeNewGrass();
-                return true;
-            }
-            else return false;
+        else if (objectAt(animal.getLocation()) instanceof Grass occupyingObject){
+            this.mapBoundary.removePosition(occupyingObject.getPosition());
+            this.grassPlaces.remove(occupyingObject.getPosition());
+            this.animals.put(animal.getLocation(), animal);
+            animal.addObserver(this);
+            animal.addObserver(mapBoundary);
+            this.mapBoundary.addPosition(animal.getLocation());
+            placeNewGrass();
+
+            System.out.println("Animals: " + this.animals.entrySet());
+            return true;
         }
+
+        else throw new IllegalArgumentException(animal.getLocation() + " is invalid animal placement!");
+//        else return false;
     }
 
     public boolean placeNewGrass(){
-        // TODO: but later
         Random randomGrassPlace = new Random();
         boolean placed = false;
 
@@ -113,6 +102,7 @@ public class GrassField extends AbstractWorldMap{
 
             if (!isOccupied(newGrass.getPosition())){
                 this.grassPlaces.put(newGrass.getPosition(), newGrass);
+                this.mapBoundary.addPosition(newGrass.getPosition());
                 placed = true;
             }
         }
@@ -121,6 +111,7 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean isOccupied(Vector2d position) {
+//        System.out.println("containsKey(position) grass: " + this.animals.containsKey(position));
         if (this.grassPlaces.containsKey(position)){
             return true;
         }
