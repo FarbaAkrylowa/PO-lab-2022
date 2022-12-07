@@ -1,113 +1,127 @@
 package agh.ics.oop.gui;
 
-import java.util.Arrays;
-import java.util.Timer;
-
 import agh.ics.oop.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
+
+
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.application.Application;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.util.Duration;
-
 public class App extends Application {
+    private final GridPane grid = new GridPane();
+    private IWorldMap map;
+
     @Override
     public void start(Stage primaryStage) {
         try {
-            MoveDirection[] directions = new OptionsParser().parse(getParameters().getRaw().toArray(new String[0]));
-            System.out.println(Arrays.toString(directions));
-            IWorldMap map = new GrassField(10);
-            Vector2d[] positions = {new Vector2d(2, 2), new Vector2d(3, 4)};
-            IEngine engine = new SimulationEngine(directions, map, positions);
-            engine.run();
+            TextField textField = new TextField();
+            Button startButton = getStartButton(textField);
+            HBox hBox = new HBox(this.grid, textField, startButton);
+            Scene scene = new Scene(hBox, 700, 700);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IllegalArgumentException exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
 
-            // Title
-            primaryStage.setTitle("Simulation Engine");
+    public Button getStartButton(TextField textField){
+        Button startButton = new Button("Start");
 
-            // GridPane declarations
-            GridPane gridPane = new GridPane();
-            gridPane.setPadding(new Insets(5, 5, 5, 5));
-            gridPane.setGridLinesVisible(true);
+        startButton.setOnAction((action) -> {
+            String text = textField.getText();
+            MoveDirection[] directions = new OptionsParser().parse(text.split(" "));
+            Vector2d[] positions = {new Vector2d(2,2), new Vector2d(3,4)};
+            this.map = new GrassField(10);
+            IEngine engine = new SimulationEngine(directions, this.map, positions, this);
+            Thread engineThread = new Thread(engine::run);
+            engineThread.start();
+        });
 
-            int xMax = map.getMaxX() + 1;
-            int yMax = map.getMaxY() + 1;
+        return startButton;
+    }
 
-            int xMin = map.getMinX();
-            int yMin = map.getMinY();
+    public void drawMap(IWorldMap map){
+        int xMax = map.getMaxX() + 1;
+        int yMax = map.getMaxY() + 1;
 
-            int width = xMax - xMin + 1;
-            int height = yMax - yMin + 1;
+        int xMin = map.getMinX();
+        int yMin = map.getMinY();
 
-//            System.out.println("UpperRight: " + xMax + " " + yMax);
-//            System.out.println("LowerLeft: " + xMin + " " + yMin);
-//            System.out.println("Width: " + width);
-//            System.out.println("Height: " + height);
+        int width = xMax - xMin + 1;
+        int height = yMax - yMin + 1;
 
-            for(int i = 0; i<width;i++)
-            {
-                ColumnConstraints columnConstraints = new ColumnConstraints(50);
-                columnConstraints.setPercentWidth(100.0 / width);
-                gridPane.getColumnConstraints().add(columnConstraints);
-            }
 
-            for(int i = 0; i<height;i++)
-            {
-                RowConstraints rowConstraints = new RowConstraints(50);
-                rowConstraints.setPercentHeight(100.0 / height);
-                gridPane.getRowConstraints().add(rowConstraints);
-            }
+        for(int i = 0; i<width;i++)
+        {
+            ColumnConstraints columnConstraints = new ColumnConstraints(40);
+            this.grid.getColumnConstraints().add(columnConstraints);
+        }
 
-            int currRow = yMax - 1;
-            int currCol = xMin;
+        for(int i = 0; i<height;i++)
+        {
+            RowConstraints rowConstraints = new RowConstraints(40);
+            this.grid.getRowConstraints().add(rowConstraints);
+        }
 
-            int currPosX = currCol;
-            int currPosY = currRow + 1;
+        int currRow = yMax - 1;
+        int currCol = xMin;
 
-            for (int i = 0; i < height; i++){
-                for (int j = 0; j < width; j++){
-                    String toDisplay = "";
+        int currPosX = currCol;
+        int currPosY = currRow + 1;
 
-                    if (i == 0 && j == 0){
-                        toDisplay = "y/x";
-                    } else if (i == 0) {
-                        toDisplay = String.valueOf(currCol);
-                        currCol++;
-                    } else if (j == 0){
-                        toDisplay = String.valueOf(currRow);
-                        currRow--;
-                    } else {
-                        Vector2d obj = new Vector2d(currPosX, currPosY);
-                        if (map.objectAt(obj) != null){
-                            toDisplay = map.objectAt(obj).toString();
-                        }
-                        currPosX++;
+        for (int i = 0; i < height; i++) {
+
+            for (int j = 0; j < width; j++) {
+                String toDisplay = "";
+                boolean elem = false;
+
+                if (i == 0 && j == 0) {
+                    toDisplay = "y\\x";
+                } else if (i == 0) {
+                    toDisplay = String.valueOf(currCol);
+                    currCol++;
+                } else if (j == 0) {
+                    toDisplay = String.valueOf(currRow);
+                    currRow--;
+                } else {
+                    Vector2d potObj = new Vector2d(currPosX, currPosY);
+                    if (map.objectAt(potObj) != null) {
+                        elem = true;
+                        GuiElementBox obj = new GuiElementBox((IMapElement) map.objectAt(potObj));
+                        Label label = new Label();
+                        GridPane.setHalignment(label, HPos.CENTER);
+                        this.grid.add(obj.vBox, j, i, 1, 1);
                     }
+                    currPosX++;
+                }
 
+                if (!elem) {
                     Label newLabel = new Label(toDisplay);
                     GridPane.setConstraints(newLabel, j, i);
                     GridPane.setHalignment(newLabel, HPos.CENTER);
-                    gridPane.add(newLabel, j, i);
+                    this.grid.add(newLabel, j, i, 1, 1);
                 }
-                currPosY--;
-                currPosX = xMin;
             }
-
-            Scene scene = new Scene(gridPane, 50 * width, 50 * height);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        } catch (IllegalArgumentException exception){
-            System.out.println(exception.getMessage());
+            currPosY--;
+            currPosX = xMin;
         }
+    }
+
+    public void renderMap(IWorldMap map){
+        this.grid.setGridLinesVisible(false);
+        this.grid.getColumnConstraints().clear();
+        this.grid.getRowConstraints().clear();
+        this.grid.getChildren().clear();
+        this.grid.setGridLinesVisible(true);
+        drawMap(map);
     }
 }

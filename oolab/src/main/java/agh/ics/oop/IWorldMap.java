@@ -5,6 +5,7 @@ public interface IWorldMap {
     int getMinY();
     int getMaxX();
     int getMaxY();
+    Vector2d[] getMapElements();
 
     /**
      * Indicate if any object can move to the given position.

@@ -67,11 +67,9 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean place(Animal animal) throws IllegalArgumentException{
-        System.out.println("Animals: " + this.animals.entrySet());
         if (super.place(animal)){
             this.mapBoundary.addPosition(animal.getLocation());
             animal.addObserver(mapBoundary);
-            System.out.println("Animals: " + this.animals.entrySet());
             return true;
         }
         else if (objectAt(animal.getLocation()) instanceof Grass occupyingObject){
@@ -82,13 +80,10 @@ public class GrassField extends AbstractWorldMap{
             animal.addObserver(mapBoundary);
             this.mapBoundary.addPosition(animal.getLocation());
             placeNewGrass();
-
-            System.out.println("Animals: " + this.animals.entrySet());
             return true;
         }
 
         else throw new IllegalArgumentException(animal.getLocation() + " is invalid animal placement!");
-//        else return false;
     }
 
     public boolean placeNewGrass(){
@@ -111,7 +106,6 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public boolean isOccupied(Vector2d position) {
-//        System.out.println("containsKey(position) grass: " + this.animals.containsKey(position));
         if (this.grassPlaces.containsKey(position)){
             return true;
         }
@@ -124,5 +118,23 @@ public class GrassField extends AbstractWorldMap{
             return this.grassPlaces.get(position);
         }
         return super.objectAt(position);
+    }
+
+
+    @Override
+    public Vector2d[] getMapElements(){
+        Vector2d[] animalsOnly = super.getMapElements();
+        Vector2d[] mapElements = new Vector2d[animalsOnly.length + this.grassPlaces.size()];
+
+        int index = 0;
+        for (Vector2d pos: this.grassPlaces.keySet()){
+            mapElements[index] = pos;
+            index++;
+        }
+
+        for (int j = 0; j < mapElements.length; j++){
+            mapElements[index] = animalsOnly[j];
+        }
+        return mapElements;
     }
 }

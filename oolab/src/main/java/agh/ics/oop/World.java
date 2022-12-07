@@ -5,6 +5,7 @@ import javafx.application.Application;
 
 public class World {
     public static void main(String[] args){
+        Application.launch(App.class, args);
 //        MoveDirection[] directions = new OptionsParser().parse(args);
 //        IWorldMap map = new RectangularMap(10, 5);
 //        Vector2d[] positions = {new Vector2d(2, 2), new Vector2d(3, 4)};
@@ -24,7 +25,5 @@ public class World {
 //        } catch (IllegalArgumentException exception){
 //            System.out.println(exception.getMessage());
 //        }
-
-        Application.launch(App.class, args);
     }
 }

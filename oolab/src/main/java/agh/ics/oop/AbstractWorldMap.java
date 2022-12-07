@@ -6,11 +6,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangedObs
     protected abstract Vector2d getUpperRight();
     protected abstract Vector2d getLowerLeft();
     protected Map<Vector2d, Animal> animals;
-//    protected final MapBoundary mapBoundary;
 
     public AbstractWorldMap() {
         this.animals = new HashMap<>();
-//        this.mapBoundary = new MapBoundary();
     }
 
     public abstract int getMinX();
@@ -25,20 +23,16 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangedObs
 
     @Override
     public boolean place(Animal animal) {
-//        System.out.println("!isOccupier(animal.getLocation(): " + !isOccupied(animal.getLocation()));
-
         if (!isOccupied(animal.getLocation())){
             this.animals.put(animal.getLocation(), animal);
             animal.addObserver(this);
             return true;
         }
-//        throw new IllegalArgumentException(animal.getLocation() + " is invalid animal placement!");
         else return false;
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-//        System.out.println("containsKey(position) abs: " + this.animals.containsKey(position));
         return this.animals.containsKey(position);
     }
 
@@ -57,7 +51,17 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangedObs
         Animal animal = this.animals.get(oldPosition);
         this.animals.remove(oldPosition);
         this.animals.put(newPosition, animal);
+    }
 
-//        this.mapBoundary.positionChanged(oldPosition, newPosition);
+    public Vector2d[] getMapElements(){
+        int i = 0;
+        Vector2d[] animalsPos = new Vector2d[this.animals.size()];
+
+        for (Vector2d pos: this.animals.keySet()){
+            animalsPos[i] = pos;
+            i++;
+        }
+
+        return animalsPos;
     }
 }
